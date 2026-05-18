@@ -5,7 +5,6 @@ Projeto desenvolvido como parte da **Etapa III** do curso técnico em TI para In
 ## 👥 Integrantes do Grupo
 * **Luis Moraes**
 * **Camile**
-* **Pietro**
 * **Victor**
 
 ## 🚀 Funcionalidades (CRUD Completo)
