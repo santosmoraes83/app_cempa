@@ -3,12 +3,13 @@ import 'screens/home_page.dart';
 import 'models/paciente.dart';
 
 void main() {
-  runApp(CareTechApp());
+  runApp(CareTechApp()); 
 }
 
 class CareTechApp extends StatelessWidget {
-  // Lista que servirá como nosso "banco de dados" temporário
-  final List<Paciente> listaPacientes = [];
+  CareTechApp({super.key});
+
+  final List<Paciente> listaPacientes = []; 
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,10 @@ class CareTechApp extends StatelessWidget {
       title: 'Care Tech',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
-      // Passamos a lista para a Home poder gerenciar as outras telas
+      
       home: HomePage(pacientes: listaPacientes),
     );
   }

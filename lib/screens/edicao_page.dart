@@ -5,10 +5,10 @@ class EdicaoPage extends StatefulWidget {
   final Paciente paciente;
   final VoidCallback aoSalvar;
 
-  EdicaoPage({required this.paciente, required this.aoSalvar});
+  const EdicaoPage({super.key, required this.paciente, required this.aoSalvar});
 
   @override
-  _EdicaoPageState createState() => _EdicaoPageState();
+  State<EdicaoPage> createState() => _EdicaoPageState();
 }
 
 class _EdicaoPageState extends State<EdicaoPage> {
@@ -25,6 +25,14 @@ class _EdicaoPageState extends State<EdicaoPage> {
     _convenioController = TextEditingController(text: widget.paciente.convenio);
   }
 
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _cpfController.dispose();
+    _convenioController.dispose();
+    super.dispose();
+  }
+
   void _atualizar() {
     if (_nomeController.text.isEmpty) return;
 
@@ -35,30 +43,63 @@ class _EdicaoPageState extends State<EdicaoPage> {
     });
 
     widget.aoSalvar(); // Notifica a tela de listagem para atualizar
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Dados updated com sucesso!')));
+
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Dados atualizados com sucesso!')),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Editar Cadastro'), backgroundColor: Color(0xFF0D47A1)),
+      appBar: AppBar(
+        title: const Text('Editar Cadastro'),
+        backgroundColor: const Color(0xFF0D47A1),
+      ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(controller: _nomeController, decoration: InputDecoration(labelText: 'Nome Completo', prefixIcon: Icon(Icons.person))),
-            SizedBox(height: 15),
-            TextField(controller: _cpfController, decoration: InputDecoration(labelText: 'CPF', prefixIcon: Icon(Icons.badge)), keyboardType: TextInputType.number),
-            SizedBox(height: 15),
-            TextField(controller: _convenioController, decoration: InputDecoration(labelText: 'Convênio', prefixIcon: Icon(Icons.health_and_safety))),
-            SizedBox(height: 40),
+            TextField(
+              controller: _nomeController,
+              decoration: const InputDecoration(
+                labelText: 'Nome Completo',
+                prefixIcon: Icon(Icons.person),
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _cpfController,
+              decoration: const InputDecoration(
+                labelText: 'CPF',
+                prefixIcon: Icon(Icons.badge),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _convenioController,
+              decoration: const InputDecoration(
+                labelText: 'Convênio',
+                prefixIcon: Icon(Icons.health_and_safety),
+              ),
+            ),
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: _atualizar,
-              child: Text('ATUALIZAR DADOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0D47A1), minimumSize: Size(double.infinity, 50)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0D47A1),
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text(
+                'ATUALIZAR DADOS',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
