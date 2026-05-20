@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/paciente.dart';
+import '../database/database_helper.dart'; // Importando o gerenciador do banco
 
 class EdicaoPage extends StatefulWidget {
   final Paciente paciente;
@@ -19,10 +20,12 @@ class _EdicaoPageState extends State<EdicaoPage> {
   @override
   void initState() {
     super.initState();
-    // Carrega os dados atuais do paciente nos campos
-    _nomeController = TextEditingController(text: widget.paciente.nome);
-    _cpfController = TextEditingController(text: widget.paciente.cpf);
-    _convenioController = TextEditingController(text: widget.paciente.convenio);
+    // Carrega os dados atuais do paciente nos campos, tratando os valores nulos com ''
+    _nomeController = TextEditingController(text: widget.paciente.nome ?? '');
+    _cpfController = TextEditingController(text: widget.paciente.cpf ?? '');
+    _convenioController = TextEditingController(
+      text: widget.paciente.convenio ?? '',
+    );
   }
 
   @override
@@ -33,20 +36,34 @@ class _EdicaoPageState extends State<EdicaoPage> {
     super.dispose();
   }
 
-  void _atualizar() {
-    if (_nomeController.text.isEmpty) return;
+  // Mudamos a função para async para aguardar a gravação no arquivo físico do banco
+  void _atualizar() async {
+    if (_nomeController.text.isEmpty || _cpfController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, preencha Nome e CPF')),
+      );
+      return;
+    }
 
-    setState(() {
-      widget.paciente.nome = _nomeController.text;
-      widget.paciente.cpf = _cpfController.text;
-      widget.paciente.convenio = _convenioController.text;
-    });
+    // Criamos um novo objeto com os dados alterados, mantendo o ID original do banco
+    Paciente pacienteAtualizado = Paciente(
+      id: widget.paciente.id,
+      nome: _nomeController.text,
+      cpf: _cpfController.text,
+      convenio: _convenioController.text,
+    );
 
-    widget.aoSalvar(); // Notifica a tela de listagem para atualizar
+    // Envia os dados atualizados para a tabela do SQLite
+    await DatabaseHelper.instance.updatePaciente(pacienteAtualizado);
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Dados updated com sucesso!')));
+    // Executa o callback que passamos na listagem para forçar a tela a se reconstruir com os novos dados
+    widget.aoSalvar();
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Dados atualizados com sucesso!')),
+    );
 
     Navigator.pop(context);
   }

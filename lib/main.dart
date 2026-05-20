@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'screens/home_page.dart';
-import 'models/paciente.dart';
 
 void main() {
-  runApp(CareTechApp()); 
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const CareTechApp());
 }
 
 class CareTechApp extends StatelessWidget {
-  CareTechApp({super.key});
-
-  final List<Paciente> listaPacientes = []; 
+  const CareTechApp({
+    super.key,
+  }); // Adicionado const para melhorar a performance
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,7 @@ class CareTechApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      
-      home: HomePage(pacientes: listaPacientes),
+      home: const HomePage(), // Limpo! Sem passar nenhuma lista por parâmetro
     );
   }
 }

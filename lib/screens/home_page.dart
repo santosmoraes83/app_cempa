@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'cadastro_page.dart';
 import 'listagem_page.dart';
-import '../models/paciente.dart';
 
 class HomePage extends StatelessWidget {
-  final List<Paciente> pacientes;
-
-  const HomePage({super.key, required this.pacientes});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CEMPA - Clínica de Especialidades Médicas'),
+        // Alterado o título para aceitar quebra de linha e centralização correta
+        title: const Text(
+          'CEMPA\nClínica de Especialidades Médicas\nde Porto Alegre',
+          textAlign: TextAlign.center, // Centraliza as duas linhas do texto
+          style: TextStyle(
+            color: Colors.white, // Força a cor branca para dar destaque
+            fontWeight: FontWeight.bold, // Deixa o texto em negrito
+            fontSize: 18, // Ajusta levemente o tamanho para caber bem
+          ),
+        ),
         backgroundColor: const Color(0xFF0D47A1),
         centerTitle: true,
+        toolbarHeight:
+            80, // Aumenta a altura da barra para acomodar as duas linhas sem apertar
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -36,12 +44,11 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 40),
 
+              // Botão para a Tela de Cadastro
               ElevatedButton.icon(
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => CadastroPage(lista: pacientes),
-                  ),
+                  MaterialPageRoute(builder: (context) => const CadastroPage()),
                 ),
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text(
@@ -62,12 +69,11 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
+              // Botão para a Tela de Listagem
               ElevatedButton.icon(
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => ListagemPage(lista: pacientes),
-                  ),
+                  MaterialPageRoute(builder: (context) => ListagemPage()),
                 ),
                 icon: const Icon(Icons.search, color: Colors.white),
                 label: const Text(
